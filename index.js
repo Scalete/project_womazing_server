@@ -3,11 +3,13 @@ import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import cors from 'cors';
 import productRoute from './routes/product.js';
+import categoryRoute from './routes/category.js';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/products', productRoute);
+app.use('/categories', categoryRoute);
 dotenv.config();
 
 //Constants
