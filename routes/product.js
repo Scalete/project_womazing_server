@@ -1,11 +1,8 @@
 import {Router} from "express";
-import {addProduct, getAllProducts} from "../controllers/product.js";
-import {onChangeCategory} from "../controllers/category.js";
+import {onFilter} from "../controllers/filter.js";
 
 const router = new Router();
 
-router.post('/admin/add-product', addProduct);
-router.get('/', getAllProducts);
-router.post('/filter', onChangeCategory);
+router.get('/filters', onFilter);
 
 export default router;
