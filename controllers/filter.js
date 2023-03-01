@@ -44,3 +44,22 @@ export const onFilter = async (req, res) => {
         res.json({message: 'Ошибка при смене категорий или пагинации'});
     }
 }
+
+export const getTopThreeProducts = async (req, res) => {
+    try {
+        const LIMITED_PRODUCTS = 3;
+        const foundProducts = await Product.find().limit(LIMITED_PRODUCTS);
+
+        if (!foundProducts.length) {
+            throw new Error();
+        }
+
+        res.json({
+            message: 'Успешно получены продукты',
+            foundProducts
+        });
+
+    } catch (e) {
+        res.json({message: 'Ошибка получения продутов из новой колекции'});
+    }
+}
