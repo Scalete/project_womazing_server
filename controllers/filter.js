@@ -41,6 +41,6 @@ export const onFilter = async (req, res) => {
         });
 
     } catch (e) {
-        res.json({message: 'Ошибка при смене категорий'});
+        res.json({message: 'Ошибка при смене категорий или пагинации'});
     }
 }
