@@ -1,6 +1,6 @@
 import Category from "../models/Category.js";
 import Product from "../models/Product.js";
-import {PAGINATION_LIMIT} from "../utils/Constants.js";
+import {PAGINATION_LIMIT, LIMITED_PRODUCTS} from "../utils/Constants.js";
 
 const onLoadCategory = async (inputCategory) => {
 
@@ -45,9 +45,22 @@ export const onFilter = async (req, res) => {
     }
 }
 
+export const getProductById = async (req, res) => {
+    try {
+        const productId = req.query._id;
+        const foundProduct = await Product.findById(productId);
+
+        res.json({
+            message: 'Успешно получен продукт',
+            foundProduct
+        });
+    } catch (e) {
+        res.json({message: 'Ошибка получения продукта'});
+    }
+}
+
 export const getTopThreeProducts = async (req, res) => {
     try {
-        const LIMITED_PRODUCTS = 3;
         const foundProducts = await Product.find().limit(LIMITED_PRODUCTS);
 
         if (!foundProducts.length) {
@@ -61,5 +74,25 @@ export const getTopThreeProducts = async (req, res) => {
 
     } catch (e) {
         res.json({message: 'Ошибка получения продутов из новой колекции'});
+    }
+}
+
+export const getRelativeProducts = async (req, res) => {
+    try {
+        const productId = req.query._id;
+        const foundProduct = await Product.findById(productId);
+        const foundProducts = await Product.find({$and: [{category: foundProduct.category}, { _id: { $ne: productId } }]}).limit(LIMITED_PRODUCTS);
+
+        if (!foundProducts.length) {
+            throw new Error();
+        }
+
+        res.json({
+            message: 'Успешно получены продукты',
+            foundProducts
+        });
+
+    } catch (e) {
+        res.json({message: 'Ошибка получения связанных продуктов'});
     }
 }
