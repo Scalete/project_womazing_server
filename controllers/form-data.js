@@ -4,10 +4,14 @@ export const addContactFormData = async (req, res) => {
     try {
         const inputFormData = req.body;
 
-        const foundEmail = await ContactForm.find({email: inputFormData.email});
-        const foundTel = await ContactForm.find({tel: inputFormData.tel});
+        const foundContactForm = await ContactForm.findOne({tel: inputFormData.tel});
 
-        if(foundEmail.length || foundTel.length) {
+        if(foundContactForm && inputFormData.message) {
+            foundContactForm.messages.push(inputFormData.message.trim());
+            await foundContactForm.save();
+            res.json({message: 'Ваше сообщение было отправлено'});
+            return;
+        } else if (foundContactForm && !inputFormData.messages) {
             res.json({message: 'Извините, но ваш email или телефон уже есть у нас. Мы с вами свяжемся :)'});
             return;
         }

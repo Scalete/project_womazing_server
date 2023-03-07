@@ -14,6 +14,10 @@ const ContactFormSchema = new mongoose.Schema({
     tel: {
         type: String,
         required: true
+    },
+
+    messages: {
+        type: [String]
     }
 });
 
