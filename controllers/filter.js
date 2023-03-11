@@ -81,10 +81,14 @@ export const getRelativeProducts = async (req, res) => {
     try {
         const productId = req.query._id;
         const foundProduct = await Product.findById(productId);
-        const foundProducts = await Product.find({$and: [{category: foundProduct.category}, { _id: { $ne: productId } }]}).limit(LIMITED_PRODUCTS);
+        const foundProducts = await Product.find({$and: [{category: foundProduct.category}, { _id: { $ne: productId } }]}).limit(LIMITED_PRODUCTS) || [];
 
         if (!foundProducts.length) {
-            throw new Error();
+            res.json({
+                message: 'Нет связанных продуктов',
+                foundProducts
+            });
+            return;
         }
 
         res.json({
