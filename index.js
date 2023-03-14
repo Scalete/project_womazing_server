@@ -5,6 +5,7 @@ import cors from 'cors';
 import productRoute from './routes/product.js';
 import categoryRoute from './routes/category.js';
 import formDataRoute from './routes/form-data.js';
+import orderRoute from './routes/order.js';
 
 const app = express();
 app.use(cors());
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use('/products', productRoute);
 app.use('/categories', categoryRoute);
 app.use('/form-data', formDataRoute);
+app.use('/order', orderRoute);
 dotenv.config();
 
 //Constants

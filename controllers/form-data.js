@@ -6,18 +6,24 @@ export const addContactFormData = async (req, res) => {
 
         const foundContactForm = await ContactForm.findOne({tel: inputFormData.tel});
 
-        if(foundContactForm && inputFormData.message) {
+        if(foundContactForm && inputFormData.message?.length) {
             foundContactForm.messages.push(inputFormData.message.trim());
             await foundContactForm.save();
+            res.json({message: 'Ваше сообщение было отправлено'});
+            return;
+        } else if (!foundContactForm && inputFormData.message?.length) {
+            const formData = new ContactForm(inputFormData);
+            formData.messages.push(inputFormData.message.trim());
+            await formData.save();
             res.json({message: 'Ваше сообщение было отправлено'});
             return;
         } else if (foundContactForm && !inputFormData.messages) {
             res.json({message: 'Извините, но ваш email или телефон уже есть у нас. Мы с вами свяжемся :)'});
             return;
+        } else {
+            const formData = new ContactForm(inputFormData);
+            await formData.save();
         }
-
-        const formData = new ContactForm(inputFormData);
-        await formData.save();
 
         res.json({message: 'Отлично! Мы скоро вам перезвоним.'});
     } catch (e) {
