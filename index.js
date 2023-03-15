@@ -18,11 +18,16 @@ dotenv.config();
 
 //Constants
 const PORT = process.env.PORT || 3001;
+const DB_NAME = process.env.DB_NAME;
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
 
 async function serverStart() {
     try {
         mongoose.set("strictQuery", false);
-        await mongoose.connect(process.env.URL)
+        await mongoose.connect(
+            `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.7kuahqn.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`
+        )
         app.listen(PORT, () => console.log(`Server started at port ${PORT}`));
     } catch (e) {
         console.error(e);
